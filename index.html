@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feliz Aniversário, Meu Amor! 🤍</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      body,
+      html {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #000000;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #ffffff;
+      }
+
+      #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: 0;
+        opacity: 0.6;
+      }
+
+      #webgl {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        display: block;
+        cursor: pointer;
+        pointer-events: none;
+      }
+
+      .ui-top-container {
+        position: absolute;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        text-align: center;
+        pointer-events: none;
+        display: none;
+      }
+
+      .ui-top-title {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+      }
+
+      .ui-top-title span {
+        color: #ff416c;
+      }
+
+      .ui-sub-name {
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        color: #ff69b4;
+        margin-top: 5px;
+        text-shadow: 0 0 10px rgba(255, 105, 180, 0.9);
+      }
+
+      .botoes-topo {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        z-index: 20;
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-acao {
+        background: rgba(255, 65, 108, 0.3);
+        border: 1px solid rgba(255, 65, 108, 0.6);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s;
+      }
+
+      .btn-acao:hover {
+        background: rgba(255, 65, 108, 0.5);
+      }
+
+      #btn-carta {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        z-index: 20;
+        background: rgba(20, 5, 10, 0.85);
+        border: 1px solid rgba(255, 105, 180, 0.6);
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        box-shadow: 0 0 15px rgba(255, 20, 147, 0.4);
+        transition: transform 0.3s;
+      }
+
+      #btn-carta:hover {
+        transform: scale(1.1);
+      }
+
+      #modal-foto {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(5, 1, 3, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 200;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .foto-modal-box {
+        background: rgba(25, 8, 15, 0.95);
+        border: 1px solid rgba(255, 105, 180, 0.5);
+        box-shadow: 0 0 40px rgba(255, 20, 147, 0.4);
+        padding: 25px;
+        border-radius: 20px;
+        max-width: 380px;
+        width: 90%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .foto-modal-box img {
+        width: 220px;
+        height: 280px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid rgba(255, 105, 180, 0.7);
+        box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+        margin-bottom: 20px;
+      }
+
+      .foto-modal-box p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        color: #fce4ec;
+      }
+
+      #modal-carta {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(5, 1, 3, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 100;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .carta-box {
+        background: rgba(25, 8, 15, 0.95);
+        border: 1px solid rgba(255, 105, 180, 0.5);
+        box-shadow: 0 0 30px rgba(255, 20, 147, 0.4);
+        padding: 30px 40px;
+        border-radius: 20px;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .carta-box h3 {
+        color: #ff69b4;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .carta-box p {
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        color: #fce4ec;
+      }
+
+      .btn-fechar {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        border: none;
+        padding: 10px 25px;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+      }
+
+      #question-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(5, 2, 4, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 150;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-box {
+        background: rgba(20, 5, 12, 0.9);
+        border: 1px solid rgba(255, 105, 180, 0.6);
+        box-shadow: 0 0 40px rgba(255, 20, 147, 0.4);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 420px;
+        width: 90%;
+        backdrop-filter: blur(8px);
+      }
+
+      .modal-box h3 {
+        font-size: 18px;
+        margin-bottom: 25px;
+        line-height: 1.4;
+        font-weight: 500;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border-radius: 30px;
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+        transition: transform 0.3s;
+      }
+
+      .btn:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <video id="bg-video" autoplay muted loop playsinline>
+      <source src="happy_day.mp4" type="video/mp4" />
+      Seu navegador não suporta vídeos de fundo.
+    </video>
+
+    <div id="question-modal">
+      <div class="modal-box">
+        <h3>Feliz 20 de Agosto! 🤍 Quer iniciar a viagem?</h3>
+        <button class="btn" id="start-btn">Começar 💖</button>
+      </div>
+    </div>
+
+    <div class="ui-top-container" id="main-title">
+      <div class="ui-top-title">Feliz Aniversário! <span>❤️</span></div>
+      <div class="ui-sub-name">Лукьянова Анастасия</div>
+    </div>
+
+    <div class="botoes-topo">
+      <button id="btn-forma" style="display: none" class="btn-acao">
+        ✨ Forma: Coração
+      </button>
+      <button id="btn-modo" style="display: none" class="btn-acao">
+        🎥 Auto: OFF
+      </button>
+    </div>
+
+    <button id="btn-carta" style="display: none" title="Mensagem">💌</button>
+
+    <div id="modal-carta">
+      <div class="carta-box">
+        <h3>✨ Feliz Aniversário, Meu Amor! ✨</h3>
+        <p>
+          Hoje o dia é inteiramente seu! 20 de agosto é a data mais especial do
+          ano. Que o seu novo ciclo venha repleto de conquistas, sorrisos e
+          muita felicidade. Estou sempre aqui torcendo por ti! 🤍
+        </p>
+        <button class="btn-fechar" id="fechar-carta">Fechar e voltar</button>
+      </div>
+    </div>
+
+    <div id="modal-foto">
+      <div class="foto-modal-box">
+        <img id="img-modal-src" src="" alt="Foto Interativa" />
+        <p id="txt-modal-msg"></p>
+        <button class="btn-fechar" id="fechar-foto-modal">Fechar</button>
+      </div>
+    </div>
+
+    <canvas id="webgl"></canvas>
+
+    <audio id="intro-music" loop>
+      <source src="happy_day.mp3" type="audio/mpeg" />
+    </audio>
+
+    <audio id="bg-music" loop>
+      <source src="music.mp3" type="audio/mpeg" />
+    </audio>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+      const FOTOS = [];
+      const totalDeFotos = 100;
+      for (let i = 1; i <= totalDeFotos; i++) {
+        FOTOS.push(`img/foto (${i}).jpg`);
+      }
+
+      const mensagensFotos = [
+        "1. Hoje o dia amanheceu mais feliz porque é 20 de agosto, o seu dia! 🤍",
+        "2. Que o seu novo ano traga tantas alegrias quanto você traz para a minha vida. ✨",
+        "3. Nunca se esqueça da mulher incrível, forte e maravilhosa que você é. 🌟",
+        "4. Seu sorriso tem o poder de iluminar qualquer escuridão. Continue brilhando! ☀️",
+        "5. Cada momento ao seu lado é um presente. Feliz aniversário! 🎁",
+        "6. Que todos os seus sonhos mais profundos se realizem neste novo ciclo. 💫",
+        "7. Você é sinônimo de garra, determinação e muita luz. Tenho orgulho de ti! 🌺",
+        "8. Que a vida te reserve surpresas maravilhosas hoje e sempre. 🚀",
+        "9. Respira fundo, confie na sua força e vá conquistar o mundo! 💪",
+        "10. O seu jeito único faz com que este mundo seja um lugar muito melhor. 🌸",
+        "11. Que este 20 de agosto venha repleto de abraços apertados e sorrisos sinceros. 🥰",
+        "12. Nenhuma dificuldade é capaz de apagar esse brilho lindo que você tem nos olhos. ✨",
+        "13. Você é capaz de superar qualquer obstáculo que apareça na sua frente. 🎯",
+        "14. Que a sua jornada seja guiada por muita paz, amor e conquistas inesquecíveis. 🌿",
+        "15. Parabéns pelo seu dia! Que a felicidade transborde em cada segundo de hoje. 🥂",
+        "16. Guardei esta foto porque ela mostra um pedacinho da sua essência radiante. 📸",
+        "17. Que a leveza e a alegria te acompanhem por onde quer que você vá. 🎈",
+        "18. Nunca duvide do seu potencial gigante. Você pode ir onde quiser! 🌍",
+        "19. Que este novo ano traga paz para o coração e muitas realizações. 🕊️",
+        "20. Data especial: 20 de agosto! O dia em que o mundo ganhou mais cor. 🎨",
+        "21. Sua energia positiva é contagiante e inspira todo mundo ao redor. 🔥",
+        "22. Que a vida te trate com todo o carinho e reciprocidade que você merece. 🌷",
+        "23. Sonhe alto, pois você tem competência de sobra para realizar todos eles. ⭐",
+        "24. Que o seu coração transborde de gratidão e amor neste aniversário. ❤️",
+        "25. Você é sinônimo de coragem. Siga firme nos seus objetivos! 🛡️",
+        "26. Cada sorriso seu é motivo para celebrar. Feliz aniversário! 🎉",
+        "27. Que a sua luz própria continue incomodando quem vive na sombra e encantando quem é do bem. ✨",
+        "28. Um novo ciclo se inicia hoje. Que seja o melhor ano da sua vida até agora! 📅",
+        "29. Que a sua garra te leve exatamente para onde você sonha estar. 🛤️",
+        "30. Obrigado por ser essa pessoa tão especial e cheia de luz. 🤍",
+        "31. Que o dia de hoje seja tão doce e marcante quanto a sua presença. 🍯",
+        "32. Em cada detalhe seu, existe uma força admirável. 🌺",
+        "33. Que a sorte e as melhores oportunidades caminhem sempre ao seu lado. 🍀",
+        "34. Celebre a sua vida, a sua história e a mulher incrível que você se tornou. 👑",
+        "35. Que os anjos te protejam e abençoem cada passo dos seus caminhos. 🙏",
+        "36. Sorria! Hoje o dia é todinho seu e o universo conspira a seu favor. 🌌",
+        "37. Que a alegria de hoje se estenda por todos os outros 365 dias do ano. 🗓️",
+        "38. Sua dedicação em tudo o que faz é algo que realmente impressiona. 💎",
+        "39. Que nunca te falte motivos para comemorar as pequenas e grandes vitórias. 🏆",
+        "40. Você é pura inspiração. Tenha um dia inesquecível! 🌟",
+        "41. Que os ventos soprem a favor e tragam muitas novidades boas. 🌬️",
+        "42. Lembre-se: você é muito mais forte do que imagina e vai vencer todas. 🛡️",
+        "43. Que a harmonia e o amor morem permanentemente no seu coração. 💖",
+        "44. Brinque, dance, comemore e seja imensamente feliz hoje! 💃",
+        "45. Que a sua intuição te guie sempre para caminhos seguros e felizes. 🧭",
+        "46. Cada instante ao seu lado ou lembrando de ti é revigorante. 🍃",
+        "47. Que a vida seja generosa com os seus maiores desejos. 🌠",
+        "48. Você tem uma alma linda que merece todo o amor do mundo. 🌹",
+        "49. Que este 20 de agosto marque o início da melhor fase da sua vida. 🚪",
+        "50. Metade da nossa lista e metade do meu desejo de te ver sempre no topo! 🏔️",
+        "51. Que a sua coragem seja maior do que qualquer medo. 🦁",
+        "52. Que a paz reine nos seus dias e a alegria transborde nas suas horas. 🕊️",
+        "53. Você é uma obra de arte da vida, cheia de detalhes fascinantes. 🖼️",
+        "54. Que os seus olhos brilhem ainda mais de felicidade hoje. 👀",
+        "55. Que o carinho das pessoas que te amam esteja presente em cada abraço de hoje. 🤗",
+        "56. Continue sendo essa força da natureza que não abaixa a cabeça para as dificuldades. ⚡",
+        "57. Que a sua trilha seja leve, florida e cheia de boas companhias. 🌻",
+        "58. Você merece todas as homenagens, palmas e comemorações de hoje. 👏",
+        "59. Que a sabedoria te acompanhe em cada nova escolha do seu ano. 🦉",
+        "60. Um brinde a você, à sua garra e ao seu aniversário! 🥂",
+        "61. Que a sua autoestima esteja sempre lá em cima, porque você é espetacular. 🦚",
+        "62. Que os dias difíceis sirvam apenas para temperar as suas grandes vitórias. 🌶️",
+        "63. Você tem um coração gigante e uma força que move montanhas. ⛰️",
+        "64. Que a sua risada gostosa ecoe alto por onde você passar hoje. 😄",
+        "65. Que a simplicidade dos bons momentos traga uma paz inigualável para ti. ☕",
+        "66. Que o universo conspira a favor de todas as suas metas e planos. 🌌",
+        "67. Cada foto aqui guarda um fragmento da nossa admiração por você. 🎞️",
+        "68. Que a sua saúde, seu bem-estar e sua paz sejam prioridades sempre. 🧘‍♀️",
+        "69. Que a sua fé e a sua esperança jamais esmoreçam diante dos ventos contrários. ⛵",
+        "70. Que orgulho ver a mulher determinada que você é todos os dias. 🎯",
+        "71. Que o seu aniversário seja o marco de uma era de muitas realizações. 📈",
+        "72. Que a energia boa de hoje te carregue de bateria para o ano inteiro. 🔋",
+        "73. Você é luz pura! Nunca deixe ninguém apagar essa chama. 🔥",
+        "74. Que a vida te ponha nos melhores lugares e com as melhores pessoas. 🗺️",
+        "75. Feliz 20 de agosto! Que a alegria de hoje multiplique-se infinitamente. ➕",
+        "76. Que os seus passos sejam firmes e os seus horizontes sejam amplos. 🌅",
+        "77. Você tiene uma beleza única, que vem de dentro para fora. 🌸",
+        "78. Que a prosperidade e o sucesso mostrem a sua rotina brilhante. 💼",
+        "79. Que a sua mente continue criativa, brilhante e cheia de ideias ótimas. 💡",
+        "80. Falta pouco para o fim da galeria, mas o meu carinho por ti é infinito! ♾️",
+        "81. Que o amor próprio seja sempre o seu guia principal. 🪞",
+        "82. Que a sua bagagem de vida seja leve e cheia de boas memórias. 🎒",
+        "83. Que a sua resiliência continue sendo a sua maior armadura. 🛡️",
+        "84. Que o dia de hoje traga as respostas e os sorrisos que você tanto espera. 💌",
+        "85. Que a sua essência doce permaneça intacta, não importa o que aconteça. 🍬",
+        "86. Que o sol brilhe forte lá fora só para celebrar o seu dia. ☀️",
+        "87. Que a sua intuição nunca falhe e te livre de todo mal. 🧿",
+        "88. Você é sinônimo de garra e superação. Parabéns! 🏅",
+        "89. Que a harmonia e o aconchego estejam presentes no seu lar hoje. 🏠",
+        "90. O mundo é um lugar mais bonito com você nele. Obrigado por existir! 🌎",
+        "91. Que a sua coragem abra portas que pareciam trancadas. 🗝️",
+        "92. Que os seus dias sejam coroados de paz e muitas risadas. 👑",
+        "93. Que a sua trajetória continue sendo motivo de orgulho para todos. 📜",
+        "94. Que a felicidade vire rotina na sua vida a partir de hoje. 🔄",
+        "95. Que a sua alma continue leve e o seu espírito livre. 🦅",
+        "96. Quase no fim da viagem estelar, mas o meu carinho por ti só cresce! 🚀",
+        "97. Que cada segundo do seu aniversário seja memorável e especial. ⏱️",
+        "98. Que a vida te devolva em dobro todo o bem que você espalha. 🪃",
+        "99. Que o seu novo ciclo venha com gosto de vitória e cheiro de conquistas. 🏆",
+        "100. Feliz Aniversário! Que todos os seus dias sejam preenchidos com o mais puro amor. ❤️",
+      ];
+
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        3000,
+      );
+      camera.position.set(0, 0, 1400);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById("webgl"),
+        antialias: true,
+        alpha: true,
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.enabled = false;
+
+      const galaxiaGrupo = new THREE.Group();
+      scene.add(galaxiaGrupo);
+
+      function criarCampoEstrelasFundo() {
+        const qtdEstrelas = 6000;
+        const geoEstrelas = new THREE.BufferGeometry();
+        const posEstrelas = new Float32Array(qtdEstrelas * 3);
+        const colEstrelas = new Float32Array(qtdEstrelas * 3);
+
+        const coresPaleta = [
+          new THREE.Color("#ffffff"),
+          new THREE.Color("#d0e1fd"),
+          new THREE.Color("#ffd1dc"),
+          new THREE.Color("#fff7ad"),
+        ];
+
+        for (let i = 0; i < qtdEstrelas; i++) {
+          const u = Math.random();
+          const v = Math.random();
+          const theta = u * 2.0 * Math.PI;
+          const phi = Math.acos(2.0 * v - 1.0);
+          const r = 1200 + Math.random() * 1200;
+
+          posEstrelas[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+          posEstrelas[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          posEstrelas[i * 3 + 2] = r * Math.cos(phi);
+
+          let corAleatoria =
+            coresPaleta[Math.floor(Math.random() * coresPaleta.length)];
+          colEstrelas[i * 3] = corAleatoria.r;
+          colEstrelas[i * 3 + 1] = corAleatoria.g;
+          colEstrelas[i * 3 + 2] = corAleatoria.b;
+        }
+
+        geoEstrelas.setAttribute(
+          "position",
+          new THREE.BufferAttribute(posEstrelas, 3),
+        );
+        geoEstrelas.setAttribute(
+          "color",
+          new THREE.BufferAttribute(colEstrelas, 3),
+        );
+
+        const matEstrelas = new THREE.PointsMaterial({
+          size: 1.8,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.75,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+
+        const campoEstrelasMesh = new THREE.Points(geoEstrelas, matEstrelas);
+        scene.add(campoEstrelasMesh);
+      }
+      criarCampoEstrelasFundo();
+
+      const planetasDistantesGrupo = new THREE.Group();
+      scene.add(planetasDistantesGrupo);
+      const listaPlanetas = [];
+
+      function criarPlanetasDistantes() {
+        const dadosPlanetas = [
+          {
+            raio: 18,
+            x: -450,
+            y: 200,
+            z: -300,
+            cor: 0x2b3d52,
+            comAnel: true,
+            corAnel: 0x4a6b8a,
+            velRot: 0.002,
+            velOrb: 0.0005,
+            orbRaio: 550,
+          },
+          {
+            raio: 12,
+            x: 500,
+            y: -180,
+            z: -400,
+            cor: 0x8a3b32,
+            comAnel: false,
+            corAnel: 0,
+            velRot: 0.001,
+            velOrb: -0.0003,
+            orbRaio: 650,
+          },
+          {
+            raio: 25,
+            x: 300,
+            y: 350,
+            z: -600,
+            cor: 0xd4a373,
+            comAnel: true,
+            corAnel: 0xfaedcd,
+            velRot: 0.0008,
+            velOrb: 0.0002,
+            orbRaio: 700,
+          },
+          {
+            raio: 10,
+            x: -600,
+            y: -250,
+            z: -500,
+            cor: 0x3a5a40,
+            comAnel: false,
+            corAnel: 0,
+            velRot: 0.003,
+            velOrb: -0.0004,
+            orbRaio: 600,
+          },
+          {
+            raio: 15,
+            x: 0,
+            y: -400,
+            z: -450,
+            cor: 0x5c677d,
+            comAnel: true,
+            corAnel: 0x979dac,
+            velRot: 0.0015,
+            velOrb: 0.0003,
+            orbRaio: 500,
+          },
+        ];
+
+        dadosPlanetas.forEach((dados) => {
+          const planetaGeo = new THREE.SphereGeometry(dados.raio, 32, 32);
+          const planetaMat = new THREE.MeshBasicMaterial({ color: dados.cor });
+          const meshPlaneta = new THREE.Mesh(planetaGeo, planetaMat);
+
+          const grupoOrbita = new THREE.Group();
+          grupoOrbita.position.set(0, 0, 0);
+
+          meshPlaneta.position.set(dados.x, dados.y, dados.z);
+          grupoOrbita.add(meshPlaneta);
+
+          if (dados.comAnel) {
+            const anelGeo = new THREE.RingGeometry(
+              dados.raio * 1.3,
+              dados.raio * 2.0,
+              32,
+            );
+            const anelMat = new THREE.MeshBasicMaterial({
+              color: dados.corAnel,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.6,
+            });
+            const meshAnel = new THREE.Mesh(anelGeo, anelMat);
+            meshAnel.rotation.x = Math.PI / 2 + 0.3;
+            meshAnel.position.set(dados.x, dados.y, dados.z);
+            grupoOrbita.add(meshAnel);
+          }
+
+          planetasDistantesGrupo.add(grupoOrbita);
+          listaPlanetas.push({
+            grupo: grupoOrbita,
+            mesh: meshPlaneta,
+            velRot: dados.velRot,
+            velOrb: dados.velOrb,
+            anguloAtual: Math.random() * Math.PI * 2,
+          });
+        });
+      }
+      criarPlanetasDistantes();
+
+      function criarTexturaRedonda() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(16, 16, 14, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        return new THREE.CanvasTexture(canvas);
+      }
+      const texturaRedonda = criarTexturaRedonda();
+
+      let vortexParticles, vortexGeometry;
+      const qtdVortex = 4000;
+
+      function criarVortexParticulas() {
+        vortexGeometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(qtdVortex * 3);
+        const colors = new Float32Array(qtdVortex * 3);
+
+        const cRosa = new THREE.Color("#ff416c");
+        const cRoxa = new THREE.Color("#ba55d3");
+        const cBranca = new THREE.Color("#ffffff");
+
+        for (let i = 0; i < qtdVortex; i++) {
+          const raioTunel = 15 + Math.random() * 80;
+          const angulo = Math.random() * Math.PI * 2;
+          const zPos = (Math.random() - 0.5) * 3500;
+
+          positions[i * 3] = Math.cos(angulo) * raioTunel;
+          positions[i * 3 + 1] = Math.sin(angulo) * raioTunel;
+          positions[i * 3 + 2] = zPos;
+
+          let mix = Math.random();
+          let c = mix > 0.5 ? cRosa : mix > 0.2 ? cRoxa : cBranca;
+
+          colors[i * 3] = c.r;
+          colors[i * 3 + 1] = c.g;
+          colors[i * 3 + 2] = c.b;
+        }
+
+        vortexGeometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positions, 3),
+        );
+        vortexGeometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(colors, 3),
+        );
+
+        const material = new THREE.PointsMaterial({
+          size: 1.5,
+          map: texturaRedonda,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.85,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+
+        vortexParticles = new THREE.Points(vortexGeometry, material);
+        scene.add(vortexParticles);
+      }
+      criarVortexParticulas();
+
+      let explosionParticles;
+      function criarExplosao() {
+        const qtd = 3000;
+        const geom = new THREE.BufferGeometry();
+        const pos = new Float32Array(qtd * 3);
+        const vel = [];
+        const cols = new Float32Array(qtd * 3);
+        const cor = new THREE.Color("#ff69b4");
+        const cor2 = new THREE.Color("#ffffff");
+
+        for (let i = 0; i < qtd; i++) {
+          pos[i * 3] = (Math.random() - 0.5) * 10;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
+          pos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+          vel.push(
+            new THREE.Vector3(
+              (Math.random() - 0.5) * 60,
+              (Math.random() - 0.5) * 60,
+              -Math.random() * 70 - 30,
+            ),
+          );
+
+          let c = Math.random() > 0.5 ? cor : cor2;
+          cols[i * 3] = c.r;
+          cols[i * 3 + 1] = c.g;
+          cols[i * 3 + 2] = c.b;
+        }
+
+        geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+        geom.setAttribute("color", new THREE.BufferAttribute(cols, 3));
+
+        const mat = new THREE.PointsMaterial({
+          size: 1.5,
+          map: texturaRedonda,
+          vertexColors: true,
+          transparent: true,
+          opacity: 1,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        explosionParticles = {
+          mesh: new THREE.Points(geom, mat),
+          velocities: vel,
+          active: false,
+        };
+        scene.add(explosionParticles.mesh);
+      }
+      criarExplosao();
+
+      const fogosLateraisGrupo = new THREE.Group();
+      scene.add(fogosLateraisGrupo);
+      const listaFogos = [];
+
+      function dispararFogosGalaticos() {
+        while (fogosLateraisGrupo.children.length > 0) {
+          fogosLateraisGrupo.remove(fogosLateraisGrupo.children[0]);
+        }
+        listaFogos.length = 0;
+
+        const posicoesFogo = [
+          new THREE.Vector3(-220, 150, -50),
+          new THREE.Vector3(220, 150, -50),
+          new THREE.Vector3(-150, 100, 50),
+          new THREE.Vector3(150, 100, 50),
+        ];
+
+        posicoesFogo.forEach((centro) => {
+          const qtdParticulas = 350;
+          const geom = new THREE.BufferGeometry();
+          const pos = new Float32Array(qtdParticulas * 3);
+          const vel = [];
+          const cols = new Float32Array(qtdParticulas * 3);
+
+          const paleta = [
+            new THREE.Color("#ff416c"),
+            new THREE.Color("#ff758c"),
+            new THREE.Color("#ffeb3b"),
+            new THREE.Color("#00e5ff"),
+            new THREE.Color("#ffffff"),
+            new THREE.Color("#ba55d3"),
+          ];
+          const corEscolhida =
+            paleta[Math.floor(Math.random() * paleta.length)];
+          const corBranca = new THREE.Color("#ffffff");
+
+          for (let i = 0; i < qtdParticulas; i++) {
+            pos[i * 3] = centro.x;
+            pos[i * 3 + 1] = centro.y;
+            pos[i * 3 + 2] = centro.z;
+
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(Math.random() * 2 - 1);
+            const speed = 2 + Math.random() * 8;
+
+            vel.push(
+              new THREE.Vector3(
+                speed * Math.sin(phi) * Math.cos(theta),
+                speed * Math.sin(phi) * Math.sin(theta),
+                speed * Math.cos(phi),
+              ),
+            );
+
+            let c = Math.random() > 0.4 ? corEscolhida : corBranca;
+            cols[i * 3] = c.r;
+            cols[i * 3 + 1] = c.g;
+            cols[i * 3 + 2] = c.b;
+          }
+
+          geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+          geom.setAttribute("color", new THREE.BufferAttribute(cols, 3));
+
+          const mat = new THREE.PointsMaterial({
+            size: 2.2,
+            map: texturaRedonda,
+            vertexColors: true,
+            transparent: true,
+            opacity: 1,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          });
+
+          const meshFogo = new THREE.Points(geom, mat);
+          fogosLateraisGrupo.add(meshFogo);
+
+          listaFogos.push({
+            mesh: meshFogo,
+            velocities: vel,
+            vida: 0,
+          });
+        });
+      }
+
+      let coracaoMesh, planetaMesh, anelPlanetaMesh;
+      const qtdForma = 5000;
+      let posAlvoAtual = new Float32Array(qtdForma * 3);
+      let posOrigemAtual = new Float32Array(qtdForma * 3);
+      let progressoMorph = 1.0;
+      let formaAtualIndex = 0;
+      const nomesFormas = [
+        "✨ Forma: Coração",
+        "✨ Forma: Esfera",
+        "✨ Forma: Saturno",
+        "✨ Forma: Flor",
+        "✨ Forma: Infinito",
+      ];
+
+      function calcularPosicoesForma(tipo) {
+        const pos = new Float32Array(qtdForma * 3);
+        for (let i = 0; i < qtdForma; i++) {
+          let x = 0,
+            y = 0,
+            z = 0;
+          if (tipo === 0) {
+            const t = Math.random() * Math.PI * 2;
+            const p = Math.sqrt(Math.random());
+            x = 18 * Math.sin(t) * Math.sin(t) * Math.sin(t) * p;
+            y =
+              (14 * Math.cos(t) -
+                5 * Math.cos(2 * t) -
+                2 * Math.cos(3 * t) -
+                Math.cos(4 * t)) *
+              p;
+            z = (Math.random() - 0.5) * 12 * p;
+            const esc = 1.5;
+            x *= esc;
+            y = y * esc + 50;
+            z *= esc;
+          } else if (tipo === 1) {
+            const u = Math.random();
+            const v = Math.random();
+            const theta = u * 2.0 * Math.PI;
+            const phi = Math.acos(2.0 * v - 1.0);
+            const r = 25 + Math.random() * 5;
+            x = r * Math.sin(phi) * Math.cos(theta);
+            y = r * Math.sin(phi) * Math.sin(theta) + 110;
+            z = r * Math.cos(phi);
+          } else if (tipo === 2) {
+            if (i < 3500) {
+              const u = Math.random(),
+                v = Math.random();
+              const theta = u * 2.0 * Math.PI,
+                phi = Math.acos(2.0 * v - 1.0);
+              const r = 16;
+              x = r * Math.sin(phi) * Math.cos(theta);
+              y = r * Math.sin(phi) * Math.sin(theta) + 110;
+              z = r * Math.cos(phi);
+            } else {
+              const ang = Math.random() * Math.PI * 2;
+              const dist = 24 + Math.random() * 22;
+              x = Math.cos(ang) * dist;
+              y = 110 + (Math.random() - 0.5) * 3;
+              z = Math.sin(ang) * dist;
+            }
+          } else if (tipo === 3) {
+            const theta = i * 0.1;
+            const r = 4 * Math.sin(6 * theta) + 18;
+            x = r * Math.cos(theta);
+            y = 110 + (Math.random() - 0.5) * 15;
+            z = r * Math.sin(theta);
+          } else if (tipo === 4) {
+            const t = Math.random() * Math.PI * 2;
+            const scale = 35;
+            const sinT = Math.sin(t);
+            const cosT = Math.cos(t);
+            const den = 1 + sinT * sinT;
+            x = (scale * cosT) / den;
+            y = 110 + (scale * sinT * cosT) / den;
+            z = (Math.random() - 0.5) * 10;
+          }
+          pos[i * 3] = x;
+          pos[i * 3 + 1] = y;
+          pos[i * 3 + 2] = z;
+        }
+        return pos;
+      }
+
+      function mudarParaProximaForma() {
+        if (!coracaoMesh) return;
+        const posAttr = coracaoMesh.geometry.attributes.position;
+        const atualArr = posAttr.array;
+        for (let i = 0; i < atualArr.length; i++) {
+          posOrigemAtual[i] = atualArr[i];
+        }
+        formaAtualIndex = (formaAtualIndex + 1) % 5;
+        posAlvoAtual = calcularPosicoesForma(formaAtualIndex);
+        progressoMorph = 0.0;
+        document.getElementById("btn-forma").innerText =
+          nomesFormas[formaAtualIndex];
+      }
+
+      function criarEstruturaCentralEXATA() {
+        const esferaGeo = new THREE.SphereGeometry(18, 32, 32);
+        const esferaMat = new THREE.MeshBasicMaterial({ color: 0x050204 });
+        planetaMesh = new THREE.Mesh(esferaGeo, esferaMat);
+        planetaMesh.position.set(0, 0, 0);
+        galaxiaGrupo.add(planetaMesh);
+
+        const anelGeo = new THREE.RingGeometry(18, 28, 64);
+        const anelMat = new THREE.MeshBasicMaterial({
+          color: 0xff1493,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.9,
+          blending: THREE.AdditiveBlending,
+        });
+        anelPlanetaMesh = new THREE.Mesh(anelGeo, anelMat);
+        anelPlanetaMesh.rotation.x = Math.PI / 2;
+        anelPlanetaMesh.position.set(0, 0, 0);
+        galaxiaGrupo.add(anelPlanetaMesh);
+
+        const geomCoracao = new THREE.BufferGeometry();
+        const positionsIniciais = calcularPosicoesForma(0);
+        for (let i = 0; i < positionsIniciais.length; i++) {
+          posAlvoAtual[i] = positionsIniciais[i];
+          posOrigemAtual[i] = positionsIniciais[i];
+        }
+
+        const colors = new Float32Array(qtdForma * 3);
+        const corRosaForte = new THREE.Color("#ff1493");
+        const corRosaClaro = new THREE.Color("#ff69b4");
+        const corBranca = new THREE.Color("#ffffff");
+
+        for (let i = 0; i < qtdForma; i++) {
+          let mix = Math.random();
+          let c =
+            mix > 0.5 ? corRosaForte : mix > 0.2 ? corRosaClaro : corBranca;
+          colors[i * 3] = c.r;
+          colors[i * 3 + 1] = c.g;
+          colors[i * 3 + 2] = c.b;
+        }
+
+        geomCoracao.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positionsIniciais, 3),
+        );
+        geomCoracao.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+        const matCoracao = new THREE.PointsMaterial({
+          size: 1.0,
+          map: texturaRedonda,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+
+        coracaoMesh = new THREE.Points(geomCoracao, matCoracao);
+        galaxiaGrupo.add(coracaoMesh);
+
+        setInterval(() => {
+          mudarParaProximaForma();
+        }, 10000);
+      }
+
+      const meshesFotos = [];
+
+      function criarGalaxiaDetalhada() {
+        const quantidade = 25000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(quantidade * 3);
+        const colors = new Float32Array(quantidade * 3);
+
+        const corRosa = new THREE.Color("#ff2a6d");
+        const corRoxa = new THREE.Color("#c71585");
+        const corAzul = new THREE.Color("#1e90ff");
+        const corBranca = new THREE.Color("#ffffff");
+
+        const bracos = 3;
+
+        for (let i = 0; i < quantidade; i++) {
+          const r = Math.pow(Math.random(), 0.8) * 180;
+          const ramo = (i % bracos) * ((2 * Math.PI) / bracos);
+          const anguloEspiral = r * 0.06 + ramo;
+
+          const x = Math.cos(anguloEspiral) * r + (Math.random() - 0.5) * 12;
+          const y = (Math.random() - 0.5) * (18 * (1 - r / 180));
+          const z = Math.sin(anguloEspiral) * r + (Math.random() - 0.5) * 12;
+
+          positions[i * 3] = x;
+          positions[i * 3 + 1] = y;
+          positions[i * 3 + 2] = z;
+
+          let mix = Math.random();
+          let c =
+            mix > 0.5
+              ? corRosa
+              : mix > 0.25
+                ? corRoxa
+                : mix > 0.1
+                  ? corAzul
+                  : corBranca;
+
+          colors[i * 3] = c.r;
+          colors[i * 3 + 1] = c.g;
+          colors[i * 3 + 2] = c.b;
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positions, 3),
+        );
+        geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+        const materialParticles = new THREE.PointsMaterial({
+          size: 0.5,
+          map: texturaRedonda,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.9,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+
+        galaxiaGrupo.add(new THREE.Points(geometry, materialParticles));
+
+        criarEstruturaCentralEXATA();
+
+        const textureLoader = new THREE.TextureLoader();
+
+        FOTOS.forEach((fotoSrc, index) => {
+          const r = 25 + (index / FOTOS.length) * 200;
+          const ramo = (index % 3) * ((2 * Math.PI) / 3);
+          const angulo = r * 0.05 + ramo + (Math.random() - 0.5) * 0.3;
+
+          const x = Math.cos(angulo) * r;
+          const z = Math.sin(angulo) * r;
+          const y = (Math.random() - 0.5) * 25;
+
+          const planeGeo = new THREE.PlaneGeometry(5, 6.5);
+
+          textureLoader.load(
+            fotoSrc,
+            (tex) => {
+              const planeMat = new THREE.MeshBasicMaterial({
+                map: tex,
+                side: THREE.DoubleSide,
+                transparent: true,
+              });
+              const mesh = new THREE.Mesh(planeGeo, planeMat);
+              mesh.position.set(x, y, z);
+              mesh.lookAt(0, y, 0);
+
+              mesh.userData = {
+                fotoUrl: fotoSrc,
+                mensagem: mensagensFotos[index],
+              };
+
+              galaxiaGrupo.add(mesh);
+              meshesFotos.push(mesh);
+            },
+            undefined,
+            () => {},
+          );
+        });
+      }
+      criarGalaxiaDetalhada();
+
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      const modalFoto = document.getElementById("modal-foto");
+      const imgModalSrc = document.getElementById("img-modal-src");
+      const txtModalMsg = document.getElementById("txt-modal-msg");
+
+      window.addEventListener("click", (event) => {
+        if (estadoSeq !== 3) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(meshesFotos);
+
+        if (intersects.length > 0) {
+          const fotoClicada = intersects[0].object;
+          if (fotoClicada.userData && fotoClicada.userData.fotoUrl) {
+            imgModalSrc.src = fotoClicada.userData.fotoUrl;
+            txtModalMsg.innerText = fotoClicada.userData.mensagem;
+            modalFoto.style.display = "flex";
+          }
+        }
+      });
+
+      document
+        .getElementById("fechar-foto-modal")
+        .addEventListener("click", () => {
+          modalFoto.style.display = "none";
+        });
+
+      let estadoSeq = 0;
+      let anguloGiroVortex = 0;
+      let modoAutomatico = false;
+
+      const introMusic = document.getElementById("intro-music");
+      introMusic.volume = 0.5;
+
+      window.addEventListener("DOMContentLoaded", () => {
+        introMusic.play().catch(() => {
+          const playIntroOnInteraction = () => {
+            introMusic.play().catch(() => {});
+            window.removeEventListener("click", playIntroOnInteraction);
+          };
+          window.addEventListener("click", playIntroOnInteraction);
+        });
+      });
+
+      document.getElementById("start-btn").addEventListener("click", () => {
+        document.getElementById("question-modal").style.display = "none";
+        document.getElementById("webgl").style.pointerEvents = "auto";
+
+        introMusic.pause();
+        introMusic.currentTime = 0;
+
+        const videoBg = document.getElementById("bg-video");
+        videoBg.pause();
+        videoBg.style.display = "none";
+
+        const bgMusic = document.getElementById("bg-music");
+        bgMusic.volume = 0.5;
+        bgMusic.play().catch((e) => console.log("Erro na música 2:", e));
+
+        estadoSeq = 1;
+
+        setInterval(() => {
+          if (estadoSeq >= 2) {
+            dispararFogosGalaticos();
+          }
+        }, 5000);
+      });
+
+      const modalCarta = document.getElementById("modal-carta");
+      document.getElementById("btn-carta").addEventListener("click", () => {
+        modalCarta.style.display = "flex";
+      });
+      document.getElementById("fechar-carta").addEventListener("click", () => {
+        modalCarta.style.display = "none";
+      });
+
+      document.getElementById("btn-forma").addEventListener("click", () => {
+        mudarParaProximaForma();
+      });
+
+      const btnModo = document.getElementById("btn-modo");
+      btnModo.addEventListener("click", () => {
+        modoAutomatico = !modoAutomatico;
+        btnModo.innerText = modoAutomatico ? "🎥 Auto: ON" : "🎥 Auto: OFF";
+      });
+
+      let anguloCameraGalaxia = 0;
+      let tempoRelogio = 0;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        tempoRelogio += 0.03;
+
+        if (progressoMorph < 1.0) {
+          progressoMorph += 0.02;
+          if (progressoMorph > 1.0) progressoMorph = 1.0;
+
+          const posArr = coracaoMesh.geometry.attributes.position.array;
+          for (let i = 0; i < posArr.length; i++) {
+            posArr[i] =
+              posOrigemAtual[i] +
+              (posAlvoAtual[i] - posOrigemAtual[i]) *
+                easeInOutQuad(progressoMorph);
+          }
+          coracaoMesh.geometry.attributes.position.needsUpdate = true;
+        }
+
+        function easeInOutQuad(t) {
+          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        listaPlanetas.forEach((p) => {
+          p.mesh.rotation.y += p.velRot;
+          p.anguloAtual += p.velOrb;
+          p.grupo.rotation.y = p.anguloAtual;
+        });
+
+        if (coracaoMesh && progressoMorph >= 1.0) {
+          const batimento = 1.0 + Math.sin(tempoRelogio * 3) * 0.018;
+          coracaoMesh.scale.set(batimento, batimento, batimento);
+        }
+
+        if (anelPlanetaMesh) {
+          anelPlanetaMesh.scale.set(
+            1 + Math.sin(tempoRelogio * 2) * 0.02,
+            1 + Math.sin(tempoRelogio * 2) * 0.02,
+            1,
+          );
+        }
+
+        if (listaFogos.length > 0) {
+          listaFogos.forEach((fogo) => {
+            fogo.vida += 0.03;
+            const pos = fogo.mesh.geometry.attributes.position.array;
+            const vel = fogo.velocities;
+
+            for (let i = 0; i < vel.length; i++) {
+              pos[i * 3] += vel[i].x;
+              pos[i * 3 + 1] += vel[i].y;
+              pos[i * 3 + 2] += vel[i].z;
+              vel[i].y -= 0.05;
+            }
+            fogo.mesh.geometry.attributes.position.needsUpdate = true;
+
+            if (fogo.mesh.material.opacity > 0) {
+              fogo.mesh.material.opacity -= 0.008;
+            }
+          });
+        }
+
+        if (estadoSeq === 1) {
+          if (camera.position.z > 0) {
+            camera.position.z -= 20;
+          } else {
+            if (vortexParticles) {
+              scene.remove(vortexParticles);
+              vortexParticles = null;
+            }
+            if (explosionParticles) explosionParticles.active = true;
+            estadoSeq = 2;
+          }
+
+          if (vortexParticles) {
+            anguloGiroVortex += 0.05;
+            vortexParticles.rotation.z = anguloGiroVortex;
+          }
+        }
+
+        if (estadoSeq === 2) {
+          if (camera.position.z < 260) {
+            camera.position.z += 5;
+            camera.position.y += 1.5;
+            camera.lookAt(0, 30, 0);
+          } else {
+            estadoSeq = 3;
+            controls.enabled = true;
+            document.getElementById("main-title").style.display = "block";
+            document.getElementById("btn-forma").style.display = "block";
+            document.getElementById("btn-modo").style.display = "block";
+            document.getElementById("btn-carta").style.display = "flex";
+
+            dispararFogosGalaticos();
+          }
+
+          if (explosionParticles && explosionParticles.active) {
+            const pos =
+              explosionParticles.mesh.geometry.attributes.position.array;
+            const vel = explosionParticles.velocities;
+            for (let i = 0; i < vel.length; i++) {
+              pos[i * 3] += vel[i].x;
+              pos[i * 3 + 1] += vel[i].y;
+              pos[i * 3 + 2] += vel[i].z;
+            }
+            explosionParticles.mesh.geometry.attributes.position.needsUpdate = true;
+          }
+        }
+
+        if (estadoSeq === 3) {
+          if (modoAutomatico) {
+            anguloCameraGalaxia += 0.002;
+            camera.position.x = Math.cos(anguloCameraGalaxia) * 200;
+            camera.position.z = Math.sin(anguloCameraGalaxia) * 200;
+            camera.position.y = 50 + Math.sin(anguloCameraGalaxia * 2) * 20;
+            camera.lookAt(0, 30, 0);
+          }
+
+          galaxiaGrupo.rotation.y += 0.0006;
+        }
+
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      animate();
+    </script>
+  </body>
+</html>
